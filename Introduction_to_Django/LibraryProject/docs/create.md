@@ -4,4 +4,4 @@ book = Book.objects.create(
     author="George Orwell",
     publication_year="1949-01-01"
 )
-print(book)
+print(book) 
