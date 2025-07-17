@@ -1,4 +1,4 @@
-from .models import Library, Author, Book
+from .models import Library, Author, Book, Librarian
 
 def list_books_in_library(library_name):
     library = Library.objects.get(name=library_name)
@@ -10,4 +10,4 @@ def query_books_by_author(author_name):
 
 def get_librarian_for_library(library_name):
     library = Library.objects.get(name=library_name)
-    return library.librarian
+    return Librarian.objects.get(library=library)
