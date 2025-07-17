@@ -130,3 +130,9 @@ def edit_book(request, pk):
         form.save()
         return redirect('list_books')
     return render(request, 'relationship_app/book_form.html', {'form': form})
+
+@permission_required('relationship_app.delete_book')
+def delete_book(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    book.delete()
+    return redirect('list_books')
