@@ -1,10 +1,13 @@
 from django.contrib.auth.decorators import user_passes_test, login_required
-from django.http import HttpResponse
+from django.shortcuts import render
+from relationship_app.models import UserProfile
 
 def is_admin(user):
-    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
+    try:
+        return user.is_authenticated and user.userprofile.role == 'Admin'
+    except UserProfile.DoesNotExist:
+        return False
 
 @user_passes_test(is_admin)
-@login_required
-def admin_dashboard(request):
-    return HttpResponse("Welcome to the Admin Dashboard")
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
