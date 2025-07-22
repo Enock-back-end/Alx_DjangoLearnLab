@@ -5,6 +5,10 @@ from .models import Library
 from django.shortcuts import render
 from .models import Book
 from django.shortcuts import render, get_object_or_404, redirect
+from .views import list_books
+from . import views
+
+
 
 def list_books(request):
     books = Book.objects.all()
