@@ -1,3 +1,7 @@
+from .models import Book
+from .models import Author
+from .models import Librarian
+from .models import Library
 from django.shortcuts import render
 from .models import Book
 
