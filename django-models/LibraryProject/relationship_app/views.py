@@ -4,6 +4,7 @@ from .models import Librarian
 from .models import Library
 from django.shortcuts import render
 from .models import Book
+from django.shortcuts import render, get_object_or_404, redirect
 
 def list_books(request):
     books = Book.objects.all()
@@ -140,3 +141,9 @@ def delete_book(request, pk):
     book = get_object_or_404(Book, pk=pk)
     book.delete()
     return redirect('list_books')
+
+def list_books(request):
+    books = Book.objects.all()
+    return render(request, 'relationship_app/book_list.html', {'books': books})
+
+
