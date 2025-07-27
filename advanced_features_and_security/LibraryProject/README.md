@@ -19,3 +19,11 @@ This is a Django project created during the ALX "Introduction to Django" module.
 # - CSRF, XSS, and clickjacking protection enabled
 # - Cookies marked as secure
 # - Views validated inputs via forms
+
+
+# Security Summary
+- HTTPS enforced with SECURE_SSL_REDIRECT
+- HSTS configured with preload
+- CSRF and session cookies secured
+- Clickjacking and MIME-sniffing blocked with headers
+- CSP policy applied
