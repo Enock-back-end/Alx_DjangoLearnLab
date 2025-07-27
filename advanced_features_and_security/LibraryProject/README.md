@@ -27,3 +27,19 @@ This is a Django project created during the ALX "Introduction to Django" module.
 - CSRF and session cookies secured
 - Clickjacking and MIME-sniffing blocked with headers
 - CSP policy applied
+
+# Django Library Project
+
+This project demonstrates advanced Django features including:
+
+- Custom User Model with profile photo and date of birth
+- Admin customization
+- Permission-based views
+- Secure app structure
+
+## Setup Instructions
+
+1. Create virtual environment and activate:
+   ```bash
+   python3 -m venv env
+   source env/bin/activate
