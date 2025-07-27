@@ -13,3 +13,9 @@ This is a Django project created during the ALX "Introduction to Django" module.
 # - Groups created: Editors, Viewers, Admins
 # - Permissions assigned using the Django admin
 # - Views protected using @permission_required decorator
+
+# Security Features:
+# - DEBUG=False for production
+# - CSRF, XSS, and clickjacking protection enabled
+# - Cookies marked as secure
+# - Views validated inputs via forms
