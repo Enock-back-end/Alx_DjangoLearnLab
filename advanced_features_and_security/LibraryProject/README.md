@@ -8,3 +8,8 @@ This is a Django project created during the ALX "Introduction to Django" module.
 - `LibraryProject/settings.py`: Main configuration file.
 - `LibraryProject/urls.py`: URL routing file.
 - `LibraryProject/wsgi.py` & `asgi.py`: Used for deployment.
+
+# Permissions and Groups:
+# - Groups created: Editors, Viewers, Admins
+# - Permissions assigned using the Django admin
+# - Views protected using @permission_required decorator
