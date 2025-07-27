@@ -7,7 +7,7 @@ def create_book_view(request):
     ...
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, permission_required
-from .models import Book  # Make sure you have a Book model
+from .models import Book
 
 @login_required
 @permission_required('bookshelf.view_book', raise_exception=True)
