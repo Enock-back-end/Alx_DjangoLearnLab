@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import permission_required
+from .models import Book
 # Create your views here.
 @permission_required('bookshelf.can_create', raise_exception=True)
 def create_book_view(request):
@@ -7,7 +8,6 @@ def create_book_view(request):
     ...
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, permission_required
-from .models import Book
 
 @login_required
 @permission_required('bookshelf.view_book', raise_exception=True)
