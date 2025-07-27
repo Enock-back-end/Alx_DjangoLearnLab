@@ -43,3 +43,4 @@ This project demonstrates advanced Django features including:
    ```bash
    python3 -m venv env
    source env/bin/activate
+
