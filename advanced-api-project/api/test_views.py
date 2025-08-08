@@ -79,3 +79,15 @@ class BookAPITestCase(APITestCase):
         response = self.client.get(self.list_url, {'ordering': 'publication_year'})
         self.assertEqual(response.data[0]['publication_year'], 2020)
         self.assertEqual(response.data[1]['publication_year'], 2021)
+
+    def test_login_and_create_book(self):
+        logged_in = self.client.login(username="testuser", password="testpass123")
+        self.assertTrue(logged_in)  # Ensure login succeeded
+
+        response = self.client.post(self.create_url, {
+            "title": "Login Book",
+            "author": self.user.id,
+            "publication_year": 2024
+        })
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['title'], "Login Book")
