@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import UserRegisterForm, UserUpdateForm, PostForm
 from .models import Post
-
+from django.urls import reverse_lazy
 # ----- AUTHENTICATION VIEWS -----
 def register_view(request):
     if request.method == 'POST':
@@ -92,6 +92,17 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     template_name = 'blog/post_confirm_delete.html'
     success_url = '/'
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
+
+
+
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    template_name = 'blog/post_confirm_delete.html'
+    success_url = reverse_lazy('post-list')  
 
     def test_func(self):
         post = self.get_object()
