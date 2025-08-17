@@ -24,7 +24,7 @@ class UserUpdateForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'tags']
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -37,11 +37,6 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email']
-
-class PostForm(forms.ModelForm):
-    class Meta:
-        model = Post
-        fields = ['title', 'content']
 
 class CommentForm(forms.ModelForm):
     class Meta:
