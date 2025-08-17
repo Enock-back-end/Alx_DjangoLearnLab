@@ -3,7 +3,7 @@ from .views import (
     register_view, login_view, logout_view, profile_view,
     PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
 )
-
+from . import views
 urlpatterns = [
     # Authentication
     path('register/', register_view, name='register'),
@@ -17,4 +17,15 @@ urlpatterns = [
     path('post/new/', PostCreateView.as_view(), name='post-create'),
     path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
+        # Post CRUD URLs
+    path('', views.PostListView.as_view(), name='post-list'),
+    path('post/<int:pk>/', views.PostDetailView.as_view(), name='post-detail'),
+    path('post/new/', views.PostCreateView.as_view(), name='post-create'),
+    path('post/<int:pk>/update/', views.PostUpdateView.as_view(), name='post-update'),
+    path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post-delete'),
+
+    # Comment URLs
+    path('post/<int:post_id>/comments/new/', views.add_comment, name='add-comment'),
+    path('comment/<int:pk>/edit/', views.CommentUpdateView.as_view(), name='edit-comment'),
+    path('comment/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='delete-comment'),
 ]
