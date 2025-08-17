@@ -5,7 +5,9 @@ from .views import (
 )
 from . import views
 from .views import CommentCreateView, CommentUpdateView, CommentDeleteView
-
+from .views import (
+    search_posts, posts_by_tag
+)
 
 urlpatterns = [
     # Authentication
@@ -40,4 +42,7 @@ urlpatterns = [
 path('post/<int:pk>/comments/new/', CommentCreateView.as_view(), name='comment-create'),
 path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment-update'),
 path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment-delete'),
+
+path('search/', search_posts, name='post-search'),              # Search URL
+path('tags/<str:tag_name>/', posts_by_tag, name='posts-by-tag') # Tag filtering URL
 ]
