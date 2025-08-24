@@ -3,6 +3,12 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+from .models import Post, Like
+from notifications.models import Notification
+from django.contrib.contenttypes.models import ContentType
 
 def index(request):
     return JsonResponse({"message": "Posts API is working!"})
@@ -36,3 +42,32 @@ class FeedView(generics.ListAPIView):
     def get_queryset(self):
         following_users = self.request.user.following.all()
         return Post.objects.filter(author__in=following_users).order_by("-created_at")
+
+
+class LikePostView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        like, created = Like.objects.get_or_create(post=post, user=request.user)
+        if created:
+            # Create notification
+            Notification.objects.create(
+                recipient=post.author,
+                actor=request.user,
+                verb="liked your post",
+                target=post,
+            )
+            return Response({"detail": "Post liked"})
+        return Response({"detail": "You already liked this post"}, status=400)
+
+class UnlikePostView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        like = Like.objects.filter(post=post, user=request.user).first()
+        if like:
+            like.delete()
+            return Response({"detail": "Post unliked"})
+        return Response({"detail": "You haven't liked this post"}, status=400)
