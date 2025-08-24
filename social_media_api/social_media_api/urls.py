@@ -25,3 +25,10 @@ urlpatterns = [
     path('api/accounts/', include('accounts.urls')),  
     path('api/', include('posts.urls')),  
 ]  
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns = [
+    pip install django-storages[boto3]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
