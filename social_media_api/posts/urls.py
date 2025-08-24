@@ -1,24 +1,13 @@
-from django.urls import path
-from . import views
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PostViewSet, CommentViewSet
-from .views import PostViewSet, CommentViewSet, FeedView
-from .views import FeedView
+from .views import PostViewSet, CommentViewSet, FeedView, index
+
 router = DefaultRouter()
 router.register(r"posts", PostViewSet, basename="post")
 router.register(r"comments", CommentViewSet, basename="comment")
 
 urlpatterns = [
-    # Example route just to avoid errors for now
-    path("", views.index, name="posts-home"),
+    path("", index, name="posts-home"),
     path("", include(router.urls)),
-    path('', include(router.urls)),
-    
     path("feed/", FeedView.as_view(), name="feed"),
-    
 ]
-
-
-
-

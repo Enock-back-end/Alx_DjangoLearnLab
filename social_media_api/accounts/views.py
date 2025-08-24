@@ -10,20 +10,8 @@ from .serializers import UserRegistrationSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 from .models import CustomUser
-
-
-
-
-
-
-
-
-
-
-
-
-
 from rest_framework.views import APIView
+from .models import CustomUser
 
 User = get_user_model()
 
@@ -49,31 +37,27 @@ class ProfileView(APIView):
 
 User = get_user_model()
 
+
 class FollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
-        try:
-            target_user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        request.user.followers.add(target_user)  # or target_user.followers.add(request.user) depending on your model
-        return Response({"success": f"You followed {target_user.username}"}, status=status.HTTP_200_OK)
+        for user in CustomUser.objects.all():  
+            if user.id == user_id:
+                request.user.following.add(user)
+                return Response({"detail": f"You are now following {user.username}"})
+        return Response({"error": "User not found"}, status=404)
 
 
 class UnfollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
-        try:
-            target_user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        request.user.followers.remove(target_user)
-        return Response({"success": f"You unfollowed {target_user.username}"}, status=status.HTTP_200_OK)
-    
+        for user in CustomUser.objects.all():  
+            if user.id == user_id:
+                request.user.following.remove(user)
+                return Response({"detail": f"You unfollowed {user.username}"})
+        return Response({"error": "User not found"}, status=404)
 
 class FollowUserView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
