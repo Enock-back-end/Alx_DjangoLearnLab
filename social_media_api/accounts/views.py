@@ -4,36 +4,30 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import RegisterSerializer, UserSerializer, LoginSerializer, LoginResponseSerializer
+from rest_framework import generics, permissions
+from django.contrib.auth import get_user_model
+from .serializers import UserRegistrationSerializer
+
+from rest_framework.views import APIView
 
 User = get_user_model()
 
-
 class RegisterView(generics.CreateAPIView):
-    serializer_class = RegisterSerializer
+    queryset = User.objects.all()
+    serializer_class = UserRegistrationSerializer
 
+class ProfileView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
-class LoginView(generics.GenericAPIView):
-    serializer_class = LoginSerializer
+    def get(self, request):
+        user = request.user
+        return Response({
+            "username": user.username,
+            "email": user.email,
+            "bio": user.bio,
+            "profile_picture": user.profile_picture.url if user.profile_picture else None,
+            "followers_count": user.followers.count(),
+        })
+    
 
-    def post(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = authenticate(
-            username=serializer.validated_data["username"],
-            password=serializer.validated_data["password"]
-        )
-        if user:
-            refresh = RefreshToken.for_user(user)
-            return Response(
-                {"refresh": str(refresh), "access": str(refresh.access_token)},
-                status=status.HTTP_200_OK
-            )
-        return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-
-
-class ProfileView(generics.RetrieveUpdateAPIView):
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self):
-        return self.request.user
+    
