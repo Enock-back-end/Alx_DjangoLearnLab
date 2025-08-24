@@ -6,30 +6,34 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from django.contrib.auth import get_user_model
 from .serializers import UserSerializer
 # Create your views here.
+from .serializers import RegisterSerializer, UserSerializer
+
 User = get_user_model()
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [permissions.AllowAny]
+    serializer_class = RegisterSerializer
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-        user = User.objects.get(username=response.data["username"])
+        user = User.objects.get(username=response.data['username'])
         token, created = Token.objects.get_or_create(user=user)
-        response.data["token"] = token.key
-        return response
-
+        return Response({
+            "user": UserSerializer(user).data,
+            "token": token.key
+        })
 
 class LoginView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
-        token = Token.objects.get(key=response.data["token"])
-        return Response({"token": token.key, "user_id": token.user_id})
-
-
+        token = Token.objects.get(key=response.data['token'])
+        return Response({
+            "user": UserSerializer(token.user).data,
+            "token": token.key
+        })
 
 class ProfileView(generics.RetrieveUpdateAPIView):
+    queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 

@@ -40,14 +40,14 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
-   'django_filters',
 
+  
     'accounts',
-    'posts',
-    'notifications',
 
 
 ]
+AUTH_USER_MODEL = 'accounts.User'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
