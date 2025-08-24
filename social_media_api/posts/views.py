@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from .models import Post, Like
 from notifications.models import Notification
 from django.contrib.contenttypes.models import ContentType
+from rest_framework import status
 
 def index(request):
     return JsonResponse({"message": "Posts API is working!"})
@@ -49,7 +50,7 @@ class LikePostView(APIView):
 
     def post(self, request, pk):
         post = get_object_or_404(Post, pk=pk)
-        like, created = Like.objects.get_or_create(post=post, user=request.user)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
         if created:
             # Create notification
             Notification.objects.create(
@@ -59,15 +60,18 @@ class LikePostView(APIView):
                 target=post,
             )
             return Response({"detail": "Post liked"})
-        return Response({"detail": "You already liked this post"}, status=400)
+        return Response({"detail": "You already liked this post"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class UnlikePostView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, pk):
         post = get_object_or_404(Post, pk=pk)
-        like = Like.objects.filter(post=post, user=request.user).first()
+        like = Like.objects.filter(user=request.user, post=post).first()
         if like:
             like.delete()
             return Response({"detail": "Post unliked"})
-        return Response({"detail": "You haven't liked this post"}, status=400)
+        return Response({"detail": "You haven't liked this post"}, status=status.HTTP_400_BAD_REQUEST)
+
