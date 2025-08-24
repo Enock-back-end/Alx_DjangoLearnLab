@@ -39,17 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'accounts',
-    'posts',    
-    
+    'posts',
+    'notifications',
     'rest_framework',
     'rest_framework.authtoken',
-
-   
-     
-
-
 ]
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
 
 
 MIDDLEWARE = [
