@@ -7,6 +7,10 @@ from .serializers import RegisterSerializer, UserSerializer, LoginSerializer, Lo
 from rest_framework import generics, permissions
 from django.contrib.auth import get_user_model
 from .serializers import UserRegistrationSerializer
+from django.shortcuts import get_object_or_404
+from rest_framework import generics, permissions
+from .models import CustomUser
+
 
 
 
@@ -61,3 +65,20 @@ class UnfollowUserView(generics.GenericAPIView):
 
         request.user.followers.remove(target_user)
         return Response({"success": f"You unfollowed {target_user.username}"}, status=status.HTTP_200_OK)
+    
+
+class FollowUserView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, user_id):
+        user_to_follow = get_object_or_404(CustomUser, id=user_id)
+        request.user.following.add(user_to_follow)
+        return Response({"detail": f"You are now following {user_to_follow.username}"})
+
+class UnfollowUserView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, user_id):
+        user_to_unfollow = get_object_or_404(CustomUser, id=user_id)
+        request.user.following.remove(user_to_unfollow)
+        return Response({"detail": f"You unfollowed {user_to_unfollow.username}"})

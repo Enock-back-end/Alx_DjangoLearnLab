@@ -5,6 +5,9 @@ from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics, permissions
+
+
 
 # Create your views here.
 
@@ -46,3 +49,4 @@ class FeedView(generics.ListAPIView):
         user = self.request.user
         following_users = user.followers.all() 
         return Post.objects.filter(author__in=following_users).order_by('-created_at')
+
