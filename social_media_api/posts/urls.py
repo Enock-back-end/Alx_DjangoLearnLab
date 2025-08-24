@@ -13,5 +13,8 @@ urlpatterns = [
     # Example route just to avoid errors for now
     path("", views.index, name="posts-home"),
     path("", include(router.urls)),
+    
 ]
+
+
 
